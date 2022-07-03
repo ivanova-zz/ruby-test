@@ -1,3 +1,5 @@
+require_relative '../jobs/complex_sql_query_job'
+
 class ArticlesController < ApplicationController
   def index
     @articles = Article.all
@@ -16,8 +18,8 @@ class ArticlesController < ApplicationController
     # In real life this could be a call for example to generate a report, perform a complex SQL query etc.
     # For the sake of testing the method contains only sleep(20)
 
-    prepared_params = ExternalCall.run_complex_sql_query(article_params)
-    @article = Article.new(prepared_params)
+    ComplexSqlQueryJob.set(queue: :complex_sql_query).perform_now(article_params)
+    @article = Article.new(article_params)
 
     if @article.save
       redirect_to @article
