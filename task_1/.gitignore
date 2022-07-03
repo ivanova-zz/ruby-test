@@ -37,3 +37,4 @@
 # Ignore mac files
 .DS_STORE
 /tmux*
+.env
